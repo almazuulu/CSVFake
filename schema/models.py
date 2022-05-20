@@ -15,7 +15,7 @@ class Schema(models.Model):
         ("Single-quote(')", "Single-quote(')")
     )
 
-    id = models.UUIDField(default=uuid.uuid4,unique=True, primary_key=True, editable=False)
+    #id = models.UUIDField(default=uuid.uuid4,unique=True, primary_key=True, editable=False)
     name  = models.CharField(max_length=200, blank=True, null=True)
     column_separator = models.CharField(max_length=20, null=True, choices=COLUMN_SEPERATOR)
     string_charachter = models.CharField(max_length=50, null=True, choices=STRING_CHARACTER)

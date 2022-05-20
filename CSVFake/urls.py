@@ -15,7 +15,9 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from schema.views import create_column
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('<pk>/', create_column, name = "create-column")
 ]
