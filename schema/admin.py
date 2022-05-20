@@ -1,5 +1,11 @@
 from django.contrib import admin
-from .models import Schema
+from .models import Schema, Column
 
-# Register your models here.
-admin.site.register(Schema)
+class ColumnInlineAdmin(admin.TabularInline):
+    model = Column
+    extra = 5
+
+class SchemaAdmin(admin.ModelAdmin):
+    inlines = [ColumnInlineAdmin]
+
+admin.site.register(Schema, SchemaAdmin)
