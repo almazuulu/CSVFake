@@ -9,21 +9,24 @@ def create_schema(request):
     form = ColumnForm(request.POST or None)
     #columns = Column.objects.filter(schema_name=schemaform)
     if request.method == "POST":
-        if formset.is_valid() and schemaform.is_valid():
+        if formset.is_valid() and schemaform.is_valid() and form.is_valid():
             schema = schemaform.save()
             formset.instance = schema
             formset.save()
-
-            # column = form.save(commit=False)
-            # column.schema_name = schema
-            # column.save()
-
+            column = form.save(commit=False)
+            column.schema_name = schema
+            column.save()
             return redirect("create-schema")
-
+        else:
+            # schema = schemaform.save()
+            return render(request, "partials/column_form.html", context={
+                "form": form
+            })
     # else:
     context={
         "schemaform":schemaform,
-        "formset":formset
+        "formset":formset,
+        "form":form
     }
     return render(request, 'create_schema.html', context)
 

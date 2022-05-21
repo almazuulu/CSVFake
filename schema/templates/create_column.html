@@ -8,11 +8,12 @@
         {{ formset.as_p }}
 
         <button type="submit"> Submit</button>
+        <button hx-get="{% url 'column-form' %}" hx-swap="beforeend" hx-target="#columnforms" >
+            Add Column
+        </button>
     </form>
 
-    <button hx-get="{% url 'column-form' %}" hx-swap="beforeend" hx-target="#columnforms" >
-        Add Column
-    </button>
+
     <hr>
 <div id = "columnforms">
 {#{% for column in columns %}#}
