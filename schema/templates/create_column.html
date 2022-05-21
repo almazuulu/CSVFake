@@ -1,24 +1,22 @@
 {% extends 'main.html' %}
-{% block content %}
 
-<h1> Create column for {{ schema.name }}</h1>
-    <form method="POST" enctype="multipart/form-data" action="{% url 'create-column' schema.id%}">
-        {%csrf_token%}
-        {{ formset.management_form }}
+{% block content %}
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ schemaform.as_p }}
+{#        {{  form.as_p }}#}
         {{ formset.as_p }}
 
-        <button type="submit"> Submit</button>
-        <button hx-get="{% url 'column-form' %}" hx-swap="beforeend" hx-target="#columnforms" >
-            Add Column
-        </button>
+    <button>Submit</button>
+
+
     </form>
-
-
-    <hr>
-<div id = "columnforms">
+     <button hx-get="{% url 'column-form' %}" hx-swap="beforeend" hx-target="#columnforms" >
+        Add Column
+    </button>
+    <div id = "columnforms">
 {#{% for column in columns %}#}
 {#    {% include 'partials/detail_column.html' %}#}
 {#{% endfor %}#}
 </div>
-
 {% endblock %}
