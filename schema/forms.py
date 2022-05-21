@@ -4,6 +4,12 @@ from .models import Column, Schema
 
 class ColumnForm(forms.ModelForm):
     class Meta:
+        model = Column
+        fields=('column_name','type_column','order')
+
+class SchemaForm(forms.ModelForm):
+    class Meta:
+        model = Schema
         fields = "__all__"
 
 
@@ -12,6 +18,6 @@ ColumnFormSet  = inlineformset_factory(
     Column,
     ColumnForm,
     can_delete=True,
-    min_num= 5,
+    min_num= 1,
     extra= 0
 )

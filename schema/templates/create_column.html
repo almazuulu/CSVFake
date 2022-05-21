@@ -1,16 +1,19 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends 'main.html' %}
+{% block content %}
+
 <h1> Create column for {{ schema.name }}</h1>
-<form method="POST" enctype="multipart/form-data">
-    {%csrf_token%}
-    {{ formset.management_form }}
-    {{ formset.as_p }}
+    <form method="POST" enctype="multipart/form-data">
+        {%csrf_token%}
+        {{ form.management_form }}
+        {{ form.as_p }}
+
+    <button hx-get="{% url 'column-form' %}" hx-swap="beforeend" hx-target="#columnforms" >
+        Add Column
+    </button>
+
     <button type="submit"> Submit</button>
-</form>
-</body>
-</html>
+    </form>
+    <hr>
+<div id = "columnforms"></div>
+
+{% endblock %}
