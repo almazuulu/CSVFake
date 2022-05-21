@@ -18,6 +18,6 @@ ColumnFormSet  = inlineformset_factory(
     Column,
     ColumnForm,
     can_delete=True,
-    min_num= 1,
+    min_num= 2,
     extra= 0
 )
