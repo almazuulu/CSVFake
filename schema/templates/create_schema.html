@@ -1,7 +1,11 @@
 {% extends 'main.html' %}
 
 {% block content %}
-       <form method="POST" enctype="multipart/form-data" hx-post=".">
+        {% if scheme %}
+        <form method="POST" enctype="multipart/form-data" hx-post="{% url 'edit-scheme' scheme.id %}">
+        {% else %}
+            <form method="POST" enctype="multipart/form-data" hx-post=".">
+            {% endif %}
         {% csrf_token %}
         {{ schemaform.as_p }}
         {{ formset.as_p }}
@@ -10,7 +14,8 @@
         </button>
             <div id = "columnforms">
             </div>
-       <button>Submit</button>
+             <button>Submit</button>
+
     </form>
 
 

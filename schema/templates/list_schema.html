@@ -1,0 +1,23 @@
+{% extends 'main.html' %}
+
+{% block content %}
+<table>
+    <tr>
+        <th>#</th>
+        <th>Title</th>
+        <th>Modified</th>
+        <th>Actions</th>
+    </tr>
+{% for schema in schemas %}
+    <tr hx-target="this" hx-swap="outerHTML">
+        <td>{{ forloop.counter }}</td>
+        <td>{{ schema.name }}</td>
+        <td>{{ schema.created }}</td>
+        <td>
+           <a href = "{% url 'edit-scheme' schema.id %}"> <button> Edit scheme</button></a> / <button hx-post="{% url 'delete-scheme' schema.id %}">Delete scheme</button>
+
+        </td>
+    </tr>
+{% endfor %}
+</table>
+{% endblock %}
