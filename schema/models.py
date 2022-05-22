@@ -52,4 +52,14 @@ class Column(models.Model):
         return self.column_name
 
 
+class Csvfile(models.Model):
+    file_created = models.DateTimeField(auto_now_add=True, editable=False)
+    filename = models.CharField(max_length=200, blank=True, null=True)
+    #numberRecord = models.PositiveIntegerField(null=True, blank=True)
+    #status = models.CharField(max_length=100, default='processing', blank=True, null=True)
+   # csvFile = models.FileField(upload_to="csvfiles/", null=True, blank=True)
+    def __str__(self):
+        return f'{self.filename}'
 
+    class Meta:
+        ordering = ['-file_created']

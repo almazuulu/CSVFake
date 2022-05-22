@@ -1,16 +1,16 @@
+from io import StringIO
 from itertools import cycle
 from random import randint
-
+from django.core.files.base import ContentFile
 from django.forms import inlineformset_factory
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from faker import Faker
 import csv
+from datetime import datetime
 
-
-
-from .models import Schema, Column
+from .models import *
 from .forms import ColumnForm, ColumnFormSet, SchemaForm
 
 def create_schema(request):
@@ -185,9 +185,10 @@ def generate_csv(request, pk):
         elif i[2] == 'Date':
             date_value = i[0]
 
-
     listOfTupleDict = []
-    for i in range(5):
+    numberRecord = int(request.POST.get('numberOfRecord'))
+
+    for i in range(numberRecord):
         for i in listDataCSV:
             if i == full_name_person:
                 listOfTupleDict.append((full_name_person, next(name_person)))
@@ -214,10 +215,41 @@ def generate_csv(request, pk):
         someDict = dict(listOfTupleDict)
         rows.append(someDict)
 
+    # csv_buffer = StringIO()
+    # writer = csv.writer(csv_buffer)
+
     fake_listData = [list(rows[i].values()) for i in range(len(rows))]
     writer.writerow(listDataCSV)
     for data in fake_listData:
         writer.writerow(data)
 
+    # csv_file = ContentFile(csv_buffer.getvalue().encode('utf-8'))
+    #
+    # csvFileObj = Csvfile()
+    # csvFileObj.csvFile = csv_file
+    # csvFileObj.save()
+
+    now = datetime.now()
+
+    # Example 1
+    dateTimeString = now.strftime("%Y-%m-%d-%H:%M:%S")
+
+    filenameDate = f"{dateTimeString}.csv"
+    with open(f'media/csvfiles/{filenameDate}', 'w', encoding='UTF8', newline='') as f:
+        writer2 = csv.writer(f)
+        writer2.writerow(listDataCSV)
+        for data in fake_listData:
+            writer2.writerow(data)
+
+    csvObject = Csvfile.objects.create(filename=filename,file_created=now)
+    csvObject.save()
     return response
 
+def generatefilecsv(request, pk):
+    schema = Schema.objects.get(pk=pk)
+
+    context = {
+        "schema": schema
+    }
+
+    return render(request,'generateFile.html', context)
