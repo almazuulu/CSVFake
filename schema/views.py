@@ -13,7 +13,7 @@ def create_schema(request):
     form = ColumnForm(request.POST or None)
     # columns = Column.objects.filter(schema_name=schemaform)
     if request.method == "POST":
-        if formset.is_valid() and schemaform.is_valid():
+        if all([formset.is_valid(), schemaform.is_valid()]):
             schema = schemaform.save()
             formset.instance = schema
             formset.save()
@@ -107,7 +107,7 @@ def edit_scheme(request, pk):
         "scheme": scheme
     }
     if request.method == "POST":
-        if formset.is_valid() and schemaform.is_valid():
+        if all([formset.is_valid(), schemaform.is_valid()]):
             schema = schemaform.save()
             formset.instance = schema
             formset.save()
