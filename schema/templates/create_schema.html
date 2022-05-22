@@ -9,14 +9,14 @@
         {% csrf_token %}
         {{ schemaform.as_p }}
         {{ formset.as_p }}
-         <button hx-get="{% url 'column-form' %}" hx-swap="beforeend" hx-target="#columnforms" >
-            Add Column
-        </button>
+
             <div id = "columnforms">
             </div>
+        <button hx-get="{% url 'column-form' %}" hx-swap="beforeend" hx-target="#columnforms" >
+                Add Column
+            </button>
              <button>Submit</button>
 
     </form>
-
 
 {% endblock %}

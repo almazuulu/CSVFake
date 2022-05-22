@@ -123,11 +123,16 @@ def generate_csv(request, pk):
     writer = csv.writer(response)
 
     listData = []
+    # for i in schema.column_set.all():
+    #     if i.column_name.isalpha():
+    #         listData.append([f'{schema.string_charachter}{i.column_name}{schema.string_charachter}', i.order, i.type_column])
+    #     listData.append([i.column_name, i.order,i.type_column])
     for i in schema.column_set.all():
-        listData.append([i.type_column, i.order])
+        listData.append([i.column_name, i.order, i.type_column])
 
     listData.sort(key=lambda x: x[1])
     listDataCSV = [i[0] for i in listData]
+    print(listDataCSV)
     writer.writerow(listDataCSV)
 
     writer.writerow(['233','2312', '232add'])
