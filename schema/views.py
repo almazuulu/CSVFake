@@ -22,7 +22,7 @@ def create_schema(request):
                 column = form.save(commit=False)
                 column.schema_name = schema
                 column.save()
-            return redirect("create-schema")
+            return redirect("listschema")
         else:
             return render(request, "partials/column_form.html", context={
                 "form": form
@@ -75,6 +75,9 @@ def list_schema(request):
     context = {
         "schemas":schemas
     }
+
+
+
     return render(request, 'list_schema.html', context)
 
 
@@ -97,6 +100,12 @@ def edit_scheme(request, pk):
     formset = ColumnFormSet(request.POST or None, instance=scheme)
     form = ColumnForm(request.POST or None, instance=scheme)
     # columns = Column.objects.filter(schema_name=schemaform)
+
+    context = {
+        "schemaform": schemaform,
+        "formset": formset,
+        "scheme": scheme
+    }
     if request.method == "POST":
         if formset.is_valid() and schemaform.is_valid():
             schema = schemaform.save()
@@ -105,13 +114,12 @@ def edit_scheme(request, pk):
 
             if form.is_valid():
                 column = form.save()
-                return redirect("listschema")
-        return redirect('listschema')
-    context = {
-        "schemaform": schemaform,
-        "formset": formset,
-        "scheme":scheme
-    }
+            # return redirect("listschema")
+            return HttpResponseRedirect(reverse('listschema'))
+
+        if request.htmx:
+            return HttpResponseRedirect(reverse('listschema'))
+
     return render(request,"create_schema.html", context)
 
 def generate_csv(request, pk):
