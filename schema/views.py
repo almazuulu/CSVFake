@@ -2,6 +2,7 @@ from django.forms import inlineformset_factory
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
+import csv
 
 from .models import Schema, Column
 from .forms import ColumnForm, ColumnFormSet, SchemaForm
@@ -112,3 +113,24 @@ def edit_scheme(request, pk):
         "scheme":scheme
     }
     return render(request,"create_schema.html", context)
+
+def generate_csv(request, pk):
+    schema = Schema.objects.get(pk=pk)
+    filename = schema.name
+    response = HttpResponse(content_type='text/csv')
+
+    response['Content-Disposition'] = f'attachment; filename="{filename}.csv"'
+    writer = csv.writer(response)
+
+    listData = []
+    for i in schema.column_set.all():
+        listData.append([i.type_column, i.order])
+
+    listData.sort(key=lambda x: x[1])
+    listDataCSV = [i[0] for i in listData]
+    writer.writerow(listDataCSV)
+
+    writer.writerow(['233','2312', '232add'])
+
+    return response
+

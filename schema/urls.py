@@ -10,4 +10,5 @@ urlpatterns = [
     path('htmx/column/<pk>/',detail_column, name='detail-column'),
     path('htmx/schema/<pk>/delete',delete_scheme, name='delete-scheme'),
     path('htmx/schema/<pk>/edit',edit_scheme, name='edit-scheme'),
+    path('generatecsv/<pk>/',generate_csv, name="generate-csv")
 ]
