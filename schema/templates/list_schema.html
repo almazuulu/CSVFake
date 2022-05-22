@@ -1,14 +1,17 @@
 {% extends 'main.html' %}
 
 {% block content %}
-<table>
-    <tr>
-        <th>#</th>
-        <th>ID</th>
-        <th>Title</th>
-        <th>Modified</th>
-        <th>Actions</th>
-    </tr>
+    <div class="col-12 py-3">
+<table class="table table-striped text-dark table-bordered col-xs-12 mx-auto table-hover table-xs">
+    <thead>
+        <tr class="bg-secondary">
+            <th scope="col" class="text-light">#</th>
+            <th scope="col" class="text-light">ID</th>
+            <th scope="col" class="text-light">Title</th>
+            <th scope="col" class="text-light">Modified</th>
+            <th scope="col" class="text-light">Actions</th>
+        </tr>
+    </thead>
 {% for schema in schemas %}
     <tr hx-target="this" hx-swap="outerHTML">
         <td>{{ forloop.counter }}</td>
@@ -16,10 +19,19 @@
         <td>{{ schema.name }}</td>
         <td>{{ schema.created }}</td>
         <td>
-            <a href = "{% url 'edit-scheme' schema.id %}"> <button> Edit scheme</button></a> / <button hx-post="{% url 'delete-scheme' schema.id %}">Delete scheme</button> <a href = "{% url 'generate-csv' schema.id %}"> <button> Generate CSV Data</button></a>
-
+            <div class="d-flex flex-row mb-3">
+                <div><a href = "{% url 'edit-scheme' schema.id %}"> <button class="btn bg-gradient-warning w-auto me-2"> <i class="fas fa-edit">&nbsp;Scheme</i></button></a>
+                </div>
+                <div>
+                   <button class="btn bg-gradient-danger w-auto me-2" hx-post="{% url 'delete-scheme' schema.id %}"><i class="fas fa-trash-alt">&nbsp;Scheme</i></button>
+                </div>
+                <div>
+                    <a href = "{% url 'generate-csv' schema.id %}"> <button class="btn bg-gradient-success w-auto me-2"><i class="fas fa-cog">&nbsp;Generate CSV</i> </button></a>
+                </div>
+              </div>
         </td>
     </tr>
 {% endfor %}
 </table>
+    </div>
 {% endblock %}
