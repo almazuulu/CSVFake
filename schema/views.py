@@ -107,7 +107,6 @@ def edit_scheme(request, pk):
     schemaform = SchemaForm(request.POST or None, instance=scheme)
     formset = ColumnFormSet(request.POST or None, instance=scheme)
     form = ColumnForm(request.POST or None, instance=scheme)
-    # columns = Column.objects.filter(schema_name=schemaform)
 
     context = {
         "schemaform": schemaform,
@@ -124,7 +123,6 @@ def edit_scheme(request, pk):
                 column = form.save(commit=False)
                 column.schema_name = schema
                 column.save()
-            # return redirect("listschema")
             return HttpResponseRedirect(reverse('listschema'))
 
         if request.htmx:
