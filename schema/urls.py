@@ -12,5 +12,6 @@ urlpatterns = [
     path('htmx/schema/<pk>/delete',login_required(delete_scheme), name='delete-scheme'),
     path('htmx/schema/<pk>/edit',login_required(edit_scheme), name='edit-scheme'),
     path('generatecsv/<pk>/',login_required(generate_csv), name="generate-csv"),
-    path('generatefile/<pk>/>',login_required(generatefilecsv), name="generate-file")
+    path('generatefile/<pk>/>',login_required(generatefilecsv), name="generate-file"),
+    path('downloadcsv/<str:filename>', login_required(downloadFileCsv), name='downloadcsv')
 ]

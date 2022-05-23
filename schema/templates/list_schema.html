@@ -6,29 +6,21 @@
     <thead>
         <tr class="bg-secondary">
             <th scope="col" class="text-light">#</th>
-            <th scope="col" class="text-light">ID</th>
-            <th scope="col" class="text-light">Title</th>
-            <th scope="col" class="text-light">Modified</th>
-            <th scope="col" class="text-light">Actions</th>
+            <th scope="col" class="text-light">TITLE</th>
+            <th scope="col" class="text-light">MODIFIED</th>
+            <th scope="col" class="text-light">ACTIONS</th>
         </tr>
     </thead>
 {% for schema in schemas %}
     <tr hx-target="this" hx-swap="outerHTML">
-        <td>{{ forloop.counter }}</td>
-        <td>{{ schema.id }}</td>
-        <td>{{ schema.name }}</td>
-        <td>{{ schema.created }}</td>
+        <td><b>{{ forloop.counter }}</b></td>
+        <td class="text-dark">{{ schema.name }}</td>
+        <td class="text-dark">{{ schema.modified_date }}</td>
         <td>
-            <div class="d-flex flex-row mb-3">
-                <div><a href = "{% url 'edit-scheme' schema.id %}"> <button class="btn bg-gradient-warning w-auto me-2"> <i class="fas fa-edit">&nbsp;Scheme</i></button></a>
-                </div>
-                <div>
+               <a href = "{% url 'edit-scheme' schema.id %}"> <button class="btn bg-gradient-warning w-auto me-2"> <i class="fas fa-edit">&nbsp;Scheme</i></button></a>
                    <button class="btn bg-gradient-danger w-auto me-2" hx-post="{% url 'delete-scheme' schema.id %}"><i class="fas fa-trash-alt">&nbsp;Scheme</i></button>
-                </div>
-                <div>
                     <a href = "{% url 'generate-file' schema.id %}"> <button class="btn bg-gradient-success w-auto me-2"><i class="fas fa-cog">&nbsp;Generate CSV</i> </button></a>
-                </div>
-              </div>
+
         </td>
     </tr>
 {% endfor %}

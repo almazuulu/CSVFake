@@ -17,7 +17,7 @@ from django.contrib import admin
 from django.contrib.auth import views as auth_views
 from django.urls import path, include
 from schema.views import create_column
-from schema.views import list_schema
+from schema.views import list_schema, listFilesAndDownload
 from django.views.generic.base import RedirectView
 from django.contrib.auth.decorators import login_required
 from django.conf.urls.static import static
@@ -27,6 +27,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', login_required(list_schema), name = 'listschema'),
     path('list/', login_required(list_schema)),
+    path('listfiles/', login_required(listFilesAndDownload), name='listfiledownload'),
     path('schema/', include('schema.urls')),
     path('accounts/login/', auth_views.LoginView.as_view(), name='login'),
     path('accounts/logout/', auth_views.LogoutView.as_view(template_name='registration/logout.html'), name='logout'),

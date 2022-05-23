@@ -1,3 +1,4 @@
+import os
 from io import StringIO
 from itertools import cycle
 from random import randint
@@ -9,6 +10,7 @@ from django.urls import reverse
 from faker import Faker
 import csv
 from datetime import datetime
+import mimetypes
 
 from .models import *
 from .forms import ColumnForm, ColumnFormSet, SchemaForm
@@ -191,7 +193,7 @@ def generate_csv(request, pk):
     for i in range(numberRecord):
         for i in listDataCSV:
             if i == full_name_person:
-                listOfTupleDict.append((full_name_person, next(name_person)))
+                listOfTupleDict.append((full_name_person, fake.name()))
             elif i == job_name:
                 listOfTupleDict.append((job_name, fake.job()))
             elif i == email_address:
@@ -223,12 +225,6 @@ def generate_csv(request, pk):
     for data in fake_listData:
         writer.writerow(data)
 
-    # csv_file = ContentFile(csv_buffer.getvalue().encode('utf-8'))
-    #
-    # csvFileObj = Csvfile()
-    # csvFileObj.csvFile = csv_file
-    # csvFileObj.save()
-
     now = datetime.now()
 
     # Example 1
@@ -241,9 +237,29 @@ def generate_csv(request, pk):
         for data in fake_listData:
             writer2.writerow(data)
 
-    csvObject = Csvfile.objects.create(filename=filename,file_created=now)
+    csvObject = Csvfile.objects.create(filename=filenameDate,file_created=now)
     csvObject.save()
     return response
+
+def listFilesAndDownload(request):
+    csvObject = Csvfile.objects.all()
+
+    context = {
+        "csvObject":csvObject
+    }
+    return render(request, 'filetable.html',context)
+
+def downloadFileCsv(request, filename):
+    BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    filepath = BASE_DIR + f'/media/csvfiles/{filename}'
+
+    path = open(filepath, 'r')
+    mime_type, _ = mimetypes.guess_type(filepath)
+
+    response = HttpResponse(path, content_type=mime_type)
+    response['Content-Disposition'] = "attachment; filename=%s" % filename
+    return response
+
 
 def generatefilecsv(request, pk):
     schema = Schema.objects.get(pk=pk)
@@ -251,5 +267,4 @@ def generatefilecsv(request, pk):
     context = {
         "schema": schema
     }
-
     return render(request,'generateFile.html', context)
