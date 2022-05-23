@@ -12,11 +12,18 @@
             </a>
           </li>
 
-             <li class="nav-item ms-lg-auto border border-secondary text-light">
+             <li class="nav-item mx-2 ms-lg-5 border border-secondary text-light">
             <a class="nav-link ps-2 d-flex justify-content-between cursor-pointer align-items-center hover" href="{% url 'create-schema' %}">
                 <strong class="text-dark">Create Scheme</strong>
             </a>
           </li>
+
+            <li class="nav-item mx-2 ms-lg-5 border border-secondary text-light">
+            <a class="nav-link ps-2 d-flex justify-content-between cursor-pointer align-items-center hover" href="{% url 'listfiledownload' %}">
+                <strong>Generated Files</strong>
+            </a>
+          </li>
+
             <li class="nav-item mx-2 ms-lg-5 border border-secondary float-right">
             <a class="nav-link ps-2 d-flex justify-content-between cursor-pointer align-items-center hover" href="{% url 'logout' %}">
                 <strong>Logout</strong>
