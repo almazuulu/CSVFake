@@ -11,6 +11,8 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 import os
 from pathlib import Path
+import dj_database_url
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -23,9 +25,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-7myjsthu)o+^v01b#y5hi3dhk@048-zd#f1bi1cow1_1+b@)_9'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -48,7 +50,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'django_htmx.middleware.HtmxMiddleware'
+    'django_htmx.middleware.HtmxMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
 ]
 
 ROOT_URLCONF = 'CSVFake.urls'
@@ -119,10 +122,21 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
 
 STATIC_URL = 'static/'
+STATIC_ROOT = BASE_DIR / "static"
+# STATICFILES_DIRS = [
+#      BASE_DIR / "static",
+#  ]
+# if DEBUG:
+#         STATICFILES_DIRS = [
+#             os.path.join(BASE_DIR, 'static')
+#        ]
+# else:
+#     STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR,'static')
-]
+
+DATABASES = {
+    "default": dj_database_url.config(conn_max_age=600, default="sqlite:///" + os.path.join(BASE_DIR, "db.sqlite3"))
+}
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'

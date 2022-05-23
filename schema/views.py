@@ -134,11 +134,19 @@ def edit_scheme(request, pk):
 
 def generate_csv(request, pk):
     schema = Schema.objects.get(pk=pk)
-    filename = schema.name
+    delimiter = schema.column_separator
+    string_char_symbol = schema.string_charachter
+
+    now = datetime.now()
+    dateTimeString = now.strftime("%Y-%m-%d-%H:%M:%S")
+
+    filenameDate = f"{dateTimeString}.csv"
+
+    filename = filenameDate
     response = HttpResponse(content_type='text/csv')
 
-    response['Content-Disposition'] = f'attachment; filename="{filename}.csv"'
-    writer = csv.writer(response)
+    response['Content-Disposition'] = f'attachment; filename="{filename}"'
+    writer = csv.writer(response, delimiter=delimiter)
 
     listData = []
 
@@ -147,7 +155,7 @@ def generate_csv(request, pk):
 
     listData.sort(key=lambda x: x[1])
     listDataCSV = [i[0] for i in listData]
-    print(listDataCSV)
+    #print(listDataCSV)
 
     fake = Faker()
     name_person = cycle([fake.name(), fake.name()])
@@ -189,28 +197,38 @@ def generate_csv(request, pk):
 
     listOfTupleDict = []
     numberRecord = int(request.POST.get('numberOfRecord'))
-
     for i in range(numberRecord):
         for i in listDataCSV:
             if i == full_name_person:
-                listOfTupleDict.append((full_name_person, fake.name()))
+                person_name_data = string_char_symbol+fake.name()+string_char_symbol
+                listOfTupleDict.append((full_name_person, person_name_data ))
             elif i == job_name:
-                listOfTupleDict.append((job_name, fake.job()))
-            elif i == email_address:
-                listOfTupleDict.append((email_address, fake.email(domain=fake.url())))
+                job_data_content = string_char_symbol + fake.job() + string_char_symbol
+                listOfTupleDict.append((job_name,job_data_content ))
             elif i == domain_name:
-                listOfTupleDict.append((domain_name, fake.url()))
+                domain_name_data = string_char_symbol + fake.url() + string_char_symbol
+                listOfTupleDict.append((domain_name, domain_name_data))
+            elif i == email_address:
+                if domain_name:
+                    email_address_data = string_char_symbol + fake.company_email() + string_char_symbol
+                    listOfTupleDict.append((email_address, email_address_data ))
+                else:
+                    email_address_data = string_char_symbol + fake.company_email() + string_char_symbol
+                    listOfTupleDict.append((email_address, email_address_data))
             elif i == tel_number:
                 listOfTupleDict.append((tel_number, fake.phone_number()))
             elif i == company_name:
-                listOfTupleDict.append((company_name, fake.company()))
+                company_name_data = string_char_symbol + fake.company() + string_char_symbol
+                listOfTupleDict.append((company_name,company_name_data))
             elif i == text_content:
-                listOfTupleDict.append((text_content, fake.sentence(nb_words=10)))
+                text_content_data = string_char_symbol + fake.sentence(nb_words=10) + string_char_symbol
+                listOfTupleDict.append((text_content,text_content_data ))
             elif i == integerValue:
-                listOfTupleDict.append((text_content, randint(0, 10)))
+                listOfTupleDict.append((text_content, randint(1, 1000)))
             elif i == address_value:
                 address_data = fake.country()+ " "+fake.city()+" " + fake.street_address()
-                listOfTupleDict.append((address_value, address_data ))
+                address_string_data = string_char_symbol + address_data + string_char_symbol
+                listOfTupleDict.append((address_value, address_string_data))
             elif i == date_value:
                 listOfTupleDict.append((date_value, fake.date()))
 
@@ -226,8 +244,6 @@ def generate_csv(request, pk):
         writer.writerow(data)
 
     now = datetime.now()
-
-    # Example 1
     dateTimeString = now.strftime("%Y-%m-%d-%H:%M:%S")
 
     filenameDate = f"{dateTimeString}.csv"
@@ -239,6 +255,7 @@ def generate_csv(request, pk):
 
     csvObject = Csvfile.objects.create(filename=filenameDate,file_created=now)
     csvObject.save()
+
     return response
 
 def listFilesAndDownload(request):

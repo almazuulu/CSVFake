@@ -4,22 +4,21 @@ import uuid
 # Create your models here.
 class Schema(models.Model):
     COLUMN_SEPERATOR = (
-        ('Comma(,)', 'Comma(,)'),
-        ('Semicolon(;)', 'Semicolon(;)'),
-        ('Quotes (“)', 'Quotes (“)'),
-        ('Braces ({})', 'Braces ({})')
+        (',', 'Comma(,)'),
+        (';', 'Semicolon(;)'),
+        ('"', 'Quotes (")'),
     )
 
     STRING_CHARACTER = (
-        ('Double-quote(")','Double-quote(")'),
-        ("Single-quote(')", "Single-quote(')")
+        ('"','Double-quote(")'),
+        ("'", "Single-quote(')")
     )
 
-    #id = models.UUIDField(default=uuid.uuid4,unique=True, primary_key=True, editable=False)
+    id = models.UUIDField(default=uuid.uuid4,unique=True, primary_key=True, editable=False, max_length=36)
     name  = models.CharField(max_length=200, blank=True, null=True)
     column_separator = models.CharField(max_length=20, null=True, choices=COLUMN_SEPERATOR)
     string_charachter = models.CharField(max_length=50, null=True, choices=STRING_CHARACTER)
-    created = models.DateTimeField(auto_now_add=True, editable=False)
+    created = models.DateTimeField(auto_now_add=True, editable=False, null=True)
     modified_date = models.DateTimeField(auto_now=True)
 
     def __str__(self):
@@ -42,6 +41,7 @@ class Column(models.Model):
         ('Date', 'Date')
     )
 
+    id = models.UUIDField(default=uuid.uuid4, unique=True, primary_key=True, editable=False, max_length=36)
     schema_name = models.ForeignKey(Schema,on_delete=models.CASCADE)
     column_name = models.CharField(max_length=200, blank=True, null=True)
     type_column = models.CharField(max_length=200, null=True, choices=TYPE_COLUMN)
@@ -53,6 +53,7 @@ class Column(models.Model):
 
 
 class Csvfile(models.Model):
+    id = models.UUIDField(default=uuid.uuid4, unique=True, primary_key=True, editable=False, max_length=36)
     file_created = models.DateTimeField(auto_now_add=True, editable=False)
     filename = models.CharField(max_length=200, blank=True, null=True)
 
